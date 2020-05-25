@@ -778,6 +778,14 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	if (local_hint == AF_INET6) {
+		int on = 1;
+		if (setsockopt(listen_fd, IPPROTO_IPV6, IPV6_V6ONLY, &on, sizeof(on)) == -1) {
+			perror("setsockopt");
+			exit(1);
+		}
+	}
+
 	for (ai_ptr = ai; ai_ptr != NULL; ai_ptr = ai_ptr->ai_next) {
 		if (bind(listen_fd, ai_ptr->ai_addr, ai_ptr->ai_addrlen) == -1 && ai_ptr->ai_next == NULL) {
 			perror("bind");
